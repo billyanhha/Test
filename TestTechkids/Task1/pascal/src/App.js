@@ -9,7 +9,7 @@ class App extends Component {
     ss: ['rotate(90deg)'],
   }
   handleChangeText = async (value) => {
-    await this.setState({ row: Array.apply(null, Array((parseInt(value ? value : 0)))) });
+    await this.setState({ row: Array.apply(null, Array((parseInt(value ? value : 0) + 1))) });
     this.setState({ onShow: false });
   }
   show = (e) => {
@@ -42,7 +42,7 @@ class App extends Component {
 
       }
     }
-    else{
+    else {
       for (let index = 0; index < arr_span.length; index++) {
         arr_span[index].style.transform = 'rotate(-360deg)';
 
@@ -50,12 +50,10 @@ class App extends Component {
     }
   }
   render() {
-    const rowPasCal = (this.state.row ? this.state.row : []).map((value, index) => {
-      if (index === 0) {
-        return <RowPasCal key={index} index={1} />
-      }
-      else if (index !== 0)
-        return <RowPasCal key={index} index={index + 1} />
+    const rowPasCal = (this.state.row ? (this.state.row) : []).map((value, index) => {
+        console.log(index);
+        
+        return <RowPasCal key={index} index={index } />
 
     })
     return (
@@ -80,6 +78,7 @@ class App extends Component {
                     { transform: `rotate(${90 * this.state.ss.length}deg) ` } : {}
                   }
                 >
+                <center><span className="span ssk"  >1</span></center>
                   {rowPasCal}</div>
                 <button className="btn btn-success" style={{ marginTop: '5%' }} onClick={this.rotate}>Rotate <i className="fas fa-play-circle"></i></button>
               </div>
