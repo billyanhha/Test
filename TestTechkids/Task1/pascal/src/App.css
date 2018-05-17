@@ -27,7 +27,7 @@ input , button{
   width: 0px;
   height: 0px;
 }
-span .ssk{
+span{
   font-weight: bold;
   display: flex;
   justify-content: center;

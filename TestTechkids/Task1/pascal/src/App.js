@@ -78,7 +78,7 @@ class App extends Component {
                     { transform: `rotate(${90 * this.state.ss.length}deg) ` } : {}
                   }
                 >
-                <center><span className="span ssk"  >1</span></center>
+                <center><span className="span ssk" style ={{marginBottom : '-10px'}} >1</span></center>
                   {rowPasCal}</div>
                 <button className="btn btn-success" style={{ marginTop: '5%' }} onClick={this.rotate}>Rotate <i className="fas fa-play-circle"></i></button>
               </div>
