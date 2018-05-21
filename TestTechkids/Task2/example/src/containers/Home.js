@@ -2,10 +2,95 @@ import React, { Component } from 'react'
 import axios from '../axios';
 import { Redirect, Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
+import 'antd/dist/antd.css'
+import { Table, Input, Row, Col, Icon } from "antd";
 class Home extends Component {
     state = {
-        arrUser: []
+        arrUser: [],
+        onSearch: true,
     }
+    compareDown_name(a, b) {
+        if (a.username < b.username) {
+            return 1;
+        } else if (a.username > b.username) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+    compareDown_email(a, b) {
+        if (a.email < b.email) {
+            return 1;
+        } else if (a.email > b.email) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+    compareDown_fullname(a, b) {
+        if (a.fullname < b.fullname) {
+            return 1;
+        } else if (a.fullname > b.fullname) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+    compareUp_name(a, b) {
+        if (a.username < b.username) {
+            return -1;
+        } else if (a.username > b.username) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    compareUp_email(a, b) {
+        if (a.email < b.email) {
+            return -1;
+        } else if (a.email > b.email) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    compareUp_fullname(a, b) {
+        if (a.fullname < b.fullname) {
+            return -1;
+        } else if (a.fullname > b.fullname) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    sortDown = async(name) => {
+        let obj = this.state.user_pagination ? this.state.user_pagination : [];
+        if(name === 'username')  this.setState({user_pagination : obj.sort(this.compareDown_name)});
+        if(name === 'email')  this.setState({user_pagination : obj.sort(this.compareDown_email)});
+        if(name === 'fullname')  this.setState({user_pagination : obj.sort(this.compareDown_fullname)});
+    }
+    sortUp = async(name) => {
+        let obj = this.state.user_pagination ? this.state.user_pagination : [];
+        if(name === 'username')  this.setState({user_pagination : obj.sort(this.compareUp_name)});
+        if(name === 'email')  this.setState({user_pagination : obj.sort(this.compareUp_email)});
+        if(name === 'fullname')  this.setState({user_pagination : obj.sort(this.compareUp_fullname)});
+    }
+    // sortDown = (obj) => {
+    //     // convert object into array
+    //     var sortable = [];
+    //     for (var key in obj)
+    //         if (obj.hasOwnProperty(key))
+    //             sortable.push([key, obj[key]]); // each item is an array in format [key, value]
+
+    //     // sort items by value
+    //     sortable.sort(function (a, b) {
+    //         var x = a[1].toLowerCase(),
+    //             y = b[1].toLowerCase();
+    //         return x < y ? -1 : x > y ? 1 : 0;
+    //     });
+    //     return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
+    // }
+
     compare = (a, b) => {
         if (a.last_nom < b.last_nom)
             return -1;
@@ -13,115 +98,137 @@ class Home extends Component {
             return 1;
         return 0;
     }
-    load_0 = () => {
-        this.setState({ arrUser: [] })
-        axios.get('/api/users')
+    load = (index) => {
+        if (this.state.onSearch ? this.state.onSearch : false) {
+            axios.get(`/api/users/?page=${index}`)                      //this.state.onSearch , if exist search content , switch to paging search content
+                .then(result => {
+                    console.log(result.data);
+                    this.setState({ user_pagination: result.data })  //user from paging
+                    console.log(this.state.user_pagination);
+                })
+                .catch(err => console.log(err))
+        }
+        else {
+            axios.get(`/api/users/search/find?page=${index}&content=${this.state.searchContent ? this.state.searchContent : ''}`)
+                .then(result => {
+                    console.log(result.data);
+                    this.setState({ user_pagination: result.data })  //user from paging
+                    console.log(this.state.user_pagination);
+                })
+                .catch(err => console.log(err))
+        }
+    }
+    //load from page
+    componentDidMount = async () => {
+        await axios.get('/api/users')
             .then(result => {
                 console.log(result.data);
-                this.setState({ arrUser: result.data })
-            })
-            .catch(err => console.log(err))
-    }
-    load_1 = () => {
-        this.setState({ arrUser: [] })
-        axios.get('/api/users/?page=2')
-            .then(result => {
-                console.log(result.data);
-                this.setState({ arrUser: result.data })
-            })
-            .catch(err => console.log(err))
-    }
-    load_2 = () => {
-        this.setState({ arrUser: [] })
-        axios.get('/api/users/?page=3')
-            .then(result => {
-                console.log(result.data);
-                this.setState({ arrUser: result.data })
-            })
-            .catch(err => console.log(err))
-    }
-    load_3 = () => {
-        this.setState({ arrUser: [] })
-        axios.get('/api/users/?page=4')
-            .then(result => {
-                console.log(result.data);
-                this.setState({ arrUser: result.data })
-            })
-            .catch(err => console.log(err))
-    }
-    load_4 = () => {
-        this.setState({ arrUser: [] })
-        axios.get('/api/users/?page=5')
-            .then(result => {
-                console.log(result.data);
-                this.setState({ arrUser: result.data })
-            })
-            .catch(err => console.log(err))
-    }
-    load_4 = () => {
-        this.setState({ arrUser: [] })
-        axios.get('/api/users/?page=6')
-            .then(result => {
-                console.log(result.data);
-                this.setState({ arrUser: result.data })
-            })
-            .catch(err => console.log(err))
-    }
-    //   objs.sort(compare);
-    componentDidMount() {
+                this.setState({ user_pagination: result.data })
 
-        axios.get('/api/users/total')
+            })
+            .catch(err => console.log(err))
+        axios.get('/api/users/total')   //all user
             .then(result => {
-                console.log(result.data);
-                this.setState({ arrUser: result.data })
+                this.setState({ total: Array.apply(null, Array(Math.round(result.data.count / 5))) })
+                console.log(1 + " " + this.state.total);
             })
             .catch(err => console.log(err))
     }
-    onSearch = (e) => {
-        this.setState({ searchContent: e });
+    onSearch = async (e) => {
+        await this.setState({ searchContent: e });
+        if (this.state.searchContent) {
+            this.setState({ onSearch: false })
+            this.setState({ total: 0 })
+            let e = this.state.searchContent;
+            let search = e.toLowerCase();
+            await axios.get(`/api/users/search/total?content=${search}`)
+                .then(result => {
+                    console.log(result.data);
+                    this.setState({ total: Array.apply(null, Array((result.data.count % 5 != 0) ? Math.round(result.data.count / 5) + 1 : Math.round(result.data.count / 5))) })
+                    console.log(1 + " " + this.state.total);
+                })
+                .catch(err => console.log(err))
+            axios.get(`/api/users/search/find?page=1&content=${search}`)  // ?page$content
+                .then(result => {
+                    console.log(result.data);
+                    this.setState({ user_pagination: result.data })  //user from paging
+                    console.log(this.state.user_pagination);
+                })
+                .catch(err => console.log(err))
+        }
+        else {
+            await axios.get('/api/users')
+                .then(result => {
+                    console.log(result.data);
+                    this.setState({ user_pagination: result.data })
+
+                })
+                .catch(err => console.log(err))
+            axios.get('/api/users/total')   //all user
+                .then(result => {
+                    this.setState({ total: Array.apply(null, Array(Math.round(result.data.count / 5))) })
+                    console.log(1 + " " + this.state.total);
+                })
+                .catch(err => console.log(err))
+        }
     }
     render() {
-        console.log(this.state.arrUser);
 
-        const arr = this.state.arrUser.filter(value => value.username.includes(this.state.searchContent));
+        //get data from user-pagination
+        const row_1 = this.props.username ? ((this.state.user_pagination ? this.state.user_pagination : []).map((value, index) => {
+            // <Table dataSource={dataSource} columns={columns} />
+            return (
+                <Row key={index}>
+                    <Col span={8}>{value.username}</Col>
+                    <Col span={8}>{value.fullname}</Col>
+                    <Col span={8}>{value.email}</Col>
+                </Row>)
 
-        const row_1 = this.props.username ? (this.state.arrUser.sort(this.compare).map((value, index) => {
-            console.log(value);
-
-            return (<div className="container userRow" key={index}>
-                <p>{value.username}</p>
-                <p>{value.fullname}</p>
-                <p>{value.email}</p>
-            </div>)
+            // row col from ant design
         })) : '';
-        const row = this.props.username ? (arr.sort(this.compare).map((value, index) => {
-            console.log(value);
+        const pagination = (this.state.total ? this.state.total : []).map((value, index) => {
 
-            return (<div className="container userRow" key={index}>
-                <p>{value.username}</p>
-                <p>{value.fullname}</p>
-                <p>{value.email}</p>
-            </div>)
-        })) : '';
+            return <li><a onClick={this.load.bind(this, index + 1)}>{index + 1}</a></li>
+        })
         return (
-            <div className="home">
+            <div className="home" >
                 <NavBar username={this.props.username} onSearch={this.onSearch} />
-                <div className="User">
+                {this.props.username ? (<div className="container User" style={{ marginTop: '50px', marginLeft: 'auto' }}>
 
-                    {this.state.searchContent ? row : row_1}
-                </div>
-                {this.props.username ? <div className="container" >
-                    <ul class="pagination">
-                        <li><a  onClick={this.load_0}>1</a></li>
-                        <li><a onClick={this.load_1}>2</a></li>
-                        <li><a onClick={this.load_2}>3</a></li>
-                        <li><a onClick={this.load_3}>4</a></li>
-                        <li><a onClick={this.load_4}>4</a></li>
-                        <li><a onClick={this.load_5}>6</a></li>
-                    </ul>
-                </div> : ''}
-            </div>
+                    <Row style={{ backgroundColor: '#bababa', fontWeight: 'bold' }}>
+                        <Col span={8} >UserName
+                            <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '3px' }}>
+                                <Icon type="caret-up" onClick={this.sortUp.bind(this, 'username')} />
+                                <Icon type="caret-down" onClick={this.sortDown.bind(this, 'username')} />
+                            </div>
+                        </Col>
+                        <Col span={8}>Fullname
+                        <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '3px' }}>
+                                <Icon type="caret-up" onClick={this.sortUp.bind(this, 'fullname')} />
+                                <Icon type="caret-down" onClick={this.sortDown.bind(this, 'fullname')} />
+                            </div>
+                        </Col>
+                        <Col span={8}>Email
+                        <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '3px' }}>
+                                <Icon type="caret-up" onClick={this.sortUp.bind(this, 'email')} />
+                                <Icon type="caret-down" onClick={this.sortDown.bind(this, 'email')} />
+                            </div>
+                        </Col>
+                    </Row>
 
+                    {row_1}
+
+
+                </div>) : ''}
+                {
+                    this.props.username ? <div className="container" >
+                        <ul class="pagination">
+                            {pagination}
+                        </ul>
+                    </div> : ''
+                }
+            </div >
+            // <div></div>
         )
     }
 }

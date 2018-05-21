@@ -4,7 +4,15 @@ body, html {
 .App{
   height: 100%;
 }
-*{
+.home{
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  height: 100%;
+}
+.container{
+  padding: 0;
+}
+.App{
   box-sizing: border-box;
   font-family: 'Pangolin', cursive;
 }
@@ -206,12 +214,14 @@ signup */
   border-left:5px solid #bababa;
 }
 .show{
-  margin-top:20px
+  margin-top:20px;
+  text-align: right;
 }
+/* nav default */
 .navBar input{
   width: 20%;
-  float: right;
-  margin-top:-25px;
+  float: left;
+  margin-top:5px;
 }
 .pagination{
   float: right;
@@ -223,4 +233,29 @@ signup */
   justify-content: center;
   height: 200px;
   font-size: 30px;
+}
+/* .btn-group>.btn:first-child */
+.btn-group>.btn:first-child{
+  border: 0;
+}
+.User table{
+  background-color: #ffffff;
+}
+div.ant-col-8{
+  padding:15px ;
+  border-bottom: 1px solid #bababac9;
+  display: flex;
+  align-items: center;
+}
+div.ant-row{
+  transition: 0.1s  ease-in-out;
+}
+div.ant-row:hover{
+  background-color: #EBF9FF;
+}
+i{
+  font-size : 10px;
+}
+i:hover{
+  color : yellow;
 }
